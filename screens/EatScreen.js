@@ -8,12 +8,15 @@ import {
   SafeAreaView,
   TextInput,
   Animated,
+  Button,
 } from 'react-native';
 import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
 
 import LoginBT from '../components/LoginBT';
 import StoreInfo from '../components/StoreInfo';
 import Seachbar from '../components/Seachbar';
+
+import firebase from 'firebase';
 
 let store = [
   {
@@ -81,6 +84,7 @@ class EatScreen extends Component {
           }}
         >
           <StoreInfo store={this.state.store} />
+          <Button title='SignOut' onPress={() => firebase.auth().signOut()} />
         </View>
         <View
           style={{ flex: 1, justifyContent: 'flex-end', paddingBottom: 20 }}

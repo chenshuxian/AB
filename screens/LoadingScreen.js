@@ -1,16 +1,32 @@
 import React, { Component } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
 
-class componentName extends Component {
+import firebase from 'firebase';
+
+class LoadingScreen extends Component {
+  componentDidMount() {
+    this.checkIfLoggedIn();
+  }
+
+  checkIfLoggedIn = () => {
+    firebase.auth().onAuthStateChanged((user) => {
+      console.log(`user ${user}`);
+      if (user) {
+        this.props.navigation.navigate('Eat');
+      } else {
+        this.props.navigation.navigate('Login');
+      }
+    });
+  };
   render() {
     return (
       <View style={styles.container}>
-        <Text>componentName</Text>
+        <ActivityIndicator size='large' />
       </View>
     );
   }
 }
-export default componentName;
+export default LoadingScreen;
 
 const styles = StyleSheet.create({
   container: {

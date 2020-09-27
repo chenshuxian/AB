@@ -16,8 +16,6 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...Ionicons.Font,
           ...SimpleLineIcons.Font,
-          ionicons: require('@expo/vector-icons/Ionicons'),
-          'simple-line-icons': require('@expo/vector-icons/SimpleLineIcons'),
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
         });
       } catch (e) {
