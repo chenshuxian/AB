@@ -31,13 +31,12 @@ export default class LoginBT extends Component {
 
 const styles = StyleSheet.create({
   button: {
-    height: 70,
+    height: 60,
     marginHorizontal: (width - 70) / 2,
-    width: 70,
-    borderRadius: 50,
+    width: 240,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    opacity: 0.8,
     marginVertical: 5,
   },
   text: {
