@@ -20,7 +20,7 @@ import HomeScreen from './screens/HomeScreen';
 import HabitScreen from './screens/HabitScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import NoticeScreen from './screens/NoticeScreen';
-
+import CalendarScreen from './screens/CalendarScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -76,6 +76,37 @@ function ButtomTabs() {
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
 
+  Date.prototype.addDays = function (days) {
+    this.setDate(this.getDate() + days);
+    return this;
+  };
+
+  Date.prototype.format = function (fmt) {
+    var o = {
+      'M+': this.getMonth() + 1, //月份
+      'd+': this.getDate(), //日
+      'h+': this.getHours(), //小時
+      'm+': this.getMinutes(), //分
+      's+': this.getSeconds(), //秒
+      'q+': Math.floor((this.getMonth() + 3) / 3), //季度
+      S: this.getMilliseconds(), //毫秒
+    };
+    if (/(y+)/.test(fmt))
+      fmt = fmt.replace(
+        RegExp.$1,
+        (this.getFullYear() + '').substr(4 - RegExp.$1.length)
+      );
+    for (var k in o)
+      if (new RegExp('(' + k + ')').test(fmt))
+        fmt = fmt.replace(
+          RegExp.$1,
+          RegExp.$1.length == 1
+            ? o[k]
+            : ('00' + o[k]).substr(('' + o[k]).length)
+        );
+    return fmt;
+  };
+
   if (!isLoadingComplete) {
     return null;
   }
@@ -87,6 +118,7 @@ export default function App(props) {
           <Stack.Screen name='Loading' component={LoadingScreen} />
           <Stack.Screen name='Buttom' component={ButtomTabs} />
           <Stack.Screen name='Login' component={LoginScreen} />
+          <Stack.Screen name='Calendar' component={CalendarScreen} />
         </Stack.Navigator>
       </NavigationContainer>
     </ThemeProvider>
