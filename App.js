@@ -21,52 +21,131 @@ import HabitScreen from './screens/HabitScreen';
 import ProfileScreen from './screens/ProfileScreen';
 import NoticeScreen from './screens/NoticeScreen';
 import CalendarScreen from './screens/CalendarScreen';
+import ListScreen from './screens/ListScreen';
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 firebase.initializeApp(firebaseConfig);
 
+import { View, TouchableOpacity } from 'react-native';
+
+function MyTabBar({ state, descriptors, navigation }) {
+  const focusedOptions = descriptors[state.routes[state.index].key].options;
+  // console.log(state.routes);
+  // console.log(state.routes[state.index].key);
+
+  if (focusedOptions.tabBarVisible === false) {
+    return null;
+  }
+
+  return (
+    <View
+      style={{
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        height: 60,
+        marginHorizontal: 30,
+        marginBottom: 20,
+      }}
+    >
+      {state.routes.map((route, index) => {
+        const { options } = descriptors[route.key];
+        // console.log(route.key);
+        const label =
+          options.tabBarLabel !== undefined
+            ? options.tabBarLabel
+            : options.title !== undefined
+            ? options.title
+            : route.name;
+        // console.log(label);
+        const isFocused = state.index === index;
+
+        const onPress = () => {
+          const event = navigation.emit({
+            type: 'tabPress',
+            target: route.key,
+            canPreventDefault: true,
+          });
+
+          if (!isFocused && !event.defaultPrevented) {
+            navigation.navigate(route.name);
+          }
+        };
+
+        const onLongPress = () => {
+          navigation.emit({
+            type: 'tabLongPress',
+            target: route.key,
+          });
+        };
+        if (label !== 'List') {
+          return (
+            <TouchableOpacity
+              key={route.key}
+              accessibilityRole='button'
+              accessibilityState={isFocused ? { selected: true } : {}}
+              accessibilityLabel={options.tabBarAccessibilityLabel}
+              testID={options.tabBarTestID}
+              onPress={onPress}
+              onLongPress={onLongPress}
+              style={{ alignItems: 'center' }}
+            >
+              <AntDesign name={options.tabBarIcon} color='grey' size={20} />
+              <Text
+                style={{ color: isFocused ? 'black' : 'grey', fontSize: 12 }}
+              >
+                {label}
+              </Text>
+            </TouchableOpacity>
+          );
+        }
+      })}
+    </View>
+  );
+}
+
 function ButtomTabs() {
   return (
-    <Tab.Navigator>
+    <Tab.Navigator tabBar={(props) => <MyTabBar {...props} />}>
       <Tab.Screen
         name='Home'
         component={HomeScreen}
         options={{
-          tabBarLabel: () => (
-            <Text style={{ fontSize: 12, color: 'grey' }}>活動</Text>
-          ),
-          tabBarIcon: () => <AntDesign name='search1' color='grey' size={20} />,
+          tabBarLabel: '活動',
+          tabBarIcon: 'search1',
         }}
       />
       <Tab.Screen
         name='Habit'
         component={HabitScreen}
         options={{
-          tabBarLabel: () => (
-            <Text style={{ fontSize: 12, color: 'grey' }}>我的最愛</Text>
-          ),
-          tabBarIcon: () => <AntDesign name='hearto' color='grey' size={20} />,
+          tabBarLabel: '我的最愛',
+          tabBarIcon: 'hearto',
         }}
       />
       <Tab.Screen
         name='Notice'
         component={NoticeScreen}
         options={{
-          tabBarLabel: () => (
-            <Text style={{ fontSize: 12, color: 'grey' }}>提醒</Text>
-          ),
-          tabBarIcon: () => <AntDesign name='bells' color='grey' size={20} />,
+          tabBarLabel: '提醒',
+          tabBarIcon: 'bells',
         }}
       />
       <Tab.Screen
         name='Profile'
         component={ProfileScreen}
         options={{
-          tabBarLabel: () => (
-            <Text style={{ fontSize: 12, color: 'grey' }}>設定</Text>
-          ),
-          tabBarIcon: () => <AntDesign name='setting' color='grey' size={20} />,
+          tabBarLabel: '設定',
+          tabBarIcon: 'setting',
+        }}
+      />
+      <Tab.Screen
+        name='List'
+        component={ListScreen}
+        options={{
+          tabBarLabel: 'List',
+          tabBarIcon: 'setting',
         }}
       />
     </Tab.Navigator>
@@ -75,37 +154,6 @@ function ButtomTabs() {
 
 export default function App(props) {
   const isLoadingComplete = useCachedResources();
-
-  Date.prototype.addDays = function (days) {
-    this.setDate(this.getDate() + days);
-    return this;
-  };
-
-  Date.prototype.format = function (fmt) {
-    var o = {
-      'M+': this.getMonth() + 1, //月份
-      'd+': this.getDate(), //日
-      'h+': this.getHours(), //小時
-      'm+': this.getMinutes(), //分
-      's+': this.getSeconds(), //秒
-      'q+': Math.floor((this.getMonth() + 3) / 3), //季度
-      S: this.getMilliseconds(), //毫秒
-    };
-    if (/(y+)/.test(fmt))
-      fmt = fmt.replace(
-        RegExp.$1,
-        (this.getFullYear() + '').substr(4 - RegExp.$1.length)
-      );
-    for (var k in o)
-      if (new RegExp('(' + k + ')').test(fmt))
-        fmt = fmt.replace(
-          RegExp.$1,
-          RegExp.$1.length == 1
-            ? o[k]
-            : ('00' + o[k]).substr(('' + o[k]).length)
-        );
-    return fmt;
-  };
 
   if (!isLoadingComplete) {
     return null;

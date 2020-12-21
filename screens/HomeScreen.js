@@ -1,54 +1,14 @@
 import React from 'react';
-import {
-  View,
-  StyleSheet,
-  SafeAreaView,
-  ScrollView,
-  TouchableOpacity,
-} from 'react-native';
+import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import ActiveCard from '../components/ActiveCard';
+import Header from '../components/Header';
 
 const HomeScreen = (props) => {
-  const { params } = props.route;
-  console.log(props.route);
-  const SelectDate = () => {
-    if (params.startDate && params.endDate) {
-      return (
-        <Text
-          style={{ fontWeight: 'bold' }}
-        >{`${params.startDate} - ${params.endDate}`}</Text>
-      );
-    }
-    return <Text></Text>;
-  };
   return (
     <SafeAreaView style={styles.container}>
-      <View
-        style={{
-          borderColor: 'white',
-          borderBottomColor: 'black',
-          borderBottomWidth: 0.5,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          padding: 10,
-        }}
-      >
-        <SelectDate />
-        <TouchableOpacity onPress={() => props.navigation.navigate('Calendar')}>
-          <Text
-            style={{
-              fontSize: 15,
-              textDecorationLine: 'underline',
-              fontWeight: 'bold',
-              textAlign: 'right',
-            }}
-          >
-            選擇日期
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <Header props={props} />
       <View
         style={{
           borderWidth: '15',
@@ -62,6 +22,7 @@ const HomeScreen = (props) => {
             title='秋冬美食'
             date='2020/12/31'
             loc='山外車站'
+            onClick={() => props.navigation.navigate('List')}
           />
           <ActiveCard
             imgUrl={require('../assets/images/food2.jpg')}

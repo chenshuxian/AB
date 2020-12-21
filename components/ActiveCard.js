@@ -1,5 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  Dimensions,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
+//import { Image } from 'react-native-elements';
 import { AntDesign } from '@expo/vector-icons';
 
 const { width, height } = Dimensions.get('window');
@@ -32,18 +40,20 @@ const Heart = () => {
 
 const ActiveCard = (props) => {
   return (
-    <View style={styles.card}>
+    <View style={{ ...styles.card, ...props.listStyle }}>
       <View style={{ flex: 1 }}>
-        <Image
-          source={props.imgUrl}
-          style={{
-            flex: 1,
-            width: null,
-            height: null,
-            resizeMode: 'cover',
-            borderRadius: 10,
-          }}
-        />
+        <TouchableOpacity style={{ flex: 1 }} onPress={() => props.onClick()}>
+          <Image
+            source={props.imgUrl}
+            style={{
+              flex: 1,
+              width: null,
+              height: null,
+              resizeMode: 'cover',
+              borderRadius: 10,
+            }}
+          />
+        </TouchableOpacity>
         <View style={{ position: 'absolute', right: 10, top: 10 }}>
           <Heart />
         </View>
