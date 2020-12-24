@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CalendarList } from 'react-native-calendars';
 import { View, Text, StyleSheet, Dimensions } from 'react-native';
 import { Button, Icon } from 'react-native-elements';
-import { Row } from 'native-base';
 const { width, height } = Dimensions.get('window');
 
 const styles = StyleSheet.create({
@@ -16,32 +15,75 @@ const lineColor = 'grey';
 const calendarHeight = height - 200;
 
 const CalendarScreen = (props) => {
+  const params = props.route.params;
+
   const [mark, setMark] = useState();
   const [count, setCount] = useState(0);
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
+  const [days, setDays] = useState();
   const oneDay = 86400000;
+  const fatherPage = props.route.params.name;
+  const sd = {};
+
+  console.log(
+    `start ${params.startDate} end ${params.endDate} days ${params.days}`
+  );
+  const combindMark = (start, mid, end) => {
+    const upd = {
+      ...start,
+      ...mid,
+      ...{
+        [end]: {
+          endingDay: true,
+          color: '#50cebb',
+          textColor: 'white',
+        },
+      },
+    };
+
+    setMark(upd);
+  };
+
+  // 中間日期計算
+  // return Arr = Object
+  // params days = 起始日-結束日
+  const midDays = (startDay, days) => {
+    const dayArr = {};
+    for (let i = 1; i < days; i++) {
+      dayArr[new Date(startDay).addDays(i).format('yyyy-MM-dd').toString()] = {
+        color: '#70d7c7',
+        textColor: 'white',
+      };
+    }
+    return dayArr;
+  };
+
+  // 如果存在起始及結束日期進行以下設定;
+  if (params.startDate && params.endDate) {
+    setStartDate(params.startDate);
+    setEndDate(params.endDate);
+    setDays(params.days);
+
+    console.log('rerender');
+    // 起始點設罝
+    sd[params.startDate] = {
+      startingDay: true,
+      color: '#50cebb',
+      textColor: 'white',
+    };
+    const mid = midDays(params.startDate, params.days);
+    params.startDate = null;
+    // setMark(upd);
+    combindMark(sd, mid, params.endDate);
+  }
 
   const reset = () => {
     setMark({});
     setCount(0);
-  };
-
-  // 中間日期計算
-  // return Arr = ['2020-12-10','2020-12-11']
-  // params days = 起始日-結束日
-  const midDays = (startDay, days) => {
-    const dayArr = [];
-    for (let i = 1; i < days; i++) {
-      console.log(
-        new Date(startDay).addDays(i).format('yyyy-MM-dd').toString()
-      );
-      dayArr.push(
-        new Date(startDay).addDays(i).format('yyyy-MM-dd').toString()
-      );
-    }
-    // dayArr.push(endDay);
-    return dayArr;
+    setStartDate();
+    setEndDate();
+    setDays();
   };
 
   const CleanButton = () => {
@@ -61,9 +103,10 @@ const CalendarScreen = (props) => {
   };
 
   const onDaySelect = (day) => {
-    const sd = {};
     // 選擇起始日
     if (count === 0) {
+      // 避免已知開始時間及結束時間帶入時產生的bug，所以先把reset state
+      reset();
       setStartDate(day.dateString);
       setCount(count + 1);
       sd[day.dateString] = {
@@ -75,41 +118,21 @@ const CalendarScreen = (props) => {
     } else if (count === 1) {
       // 選擇結束日期
       const startD = Date.parse(Object.keys(mark));
-      const endD = Date.parse(day.dateString);
+      const endD = day.timestamp;
       setEndDate(day.dateString);
 
       // 結束時間 > 起始時間
       if (endD > startD) {
         // 計算中間總天數
-        const days = (endD - startD) / oneDay;
-        const midDayObject = {};
+        let d = (endD - startD) / oneDay;
+        setDays(d);
+        let midArr;
         // console.log(`days ${days}`);
-        if (days > 1) {
-          const midArr = midDays(Object.keys(mark), days);
+        if (d > 1) {
+          midArr = midDays(Object.keys(mark), d);
           // eslint-disable-next-line no-shadow
-          midArr.forEach((day) => {
-            midDayObject[day] = {
-              color: '#70d7c7',
-              textColor: 'white',
-            };
-          });
         }
-        // console.log(`midArr ${midArr[1]}`);
-
-        const upd = {
-          ...mark,
-          ...midDayObject,
-          ...{
-            [day.dateString]: {
-              endingDay: true,
-              color: '#50cebb',
-              textColor: 'white',
-            },
-          },
-        };
-
-        // console.log(upd);
-        setMark(upd);
+        combindMark(mark, midArr, day.dateString);
         setCount(count + 1);
       } else {
         reset();
@@ -161,7 +184,7 @@ const CalendarScreen = (props) => {
         hideDayNames
         // Callback which gets executed when visible months change in scroll view. Default = undefined
         onVisibleMonthsChange={(months) => {
-          console.log('now these months are visible', months);
+          // console.log('now these months are visible', months);
         }}
         // Max amount of months allowed to scroll to the past. Default = 50
         pastScrollRange={0}
@@ -202,8 +225,8 @@ const CalendarScreen = (props) => {
           title='搜尋'
           onPress={() =>
             props.navigation.navigate('Buttom', {
-              screen: 'Home',
-              params: { startDate, endDate },
+              screen: fatherPage,
+              params: { startDate, endDate, days },
             })
           }
         />

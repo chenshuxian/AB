@@ -1,4 +1,4 @@
-import { Ionicons, SimpleLineIcons } from '@expo/vector-icons';
+import { Ionicons, SimpleLineIcons, AntDesign } from '@expo/vector-icons';
 import * as Font from 'expo-font';
 import * as SplashScreen from 'expo-splash-screen';
 import * as React from 'react';
@@ -16,6 +16,7 @@ export default function useCachedResources() {
         await Font.loadAsync({
           ...Ionicons.Font,
           ...SimpleLineIcons.Font,
+          ...AntDesign.Font,
           'space-mono': require('../assets/fonts/SpaceMono-Regular.ttf'),
         });
 

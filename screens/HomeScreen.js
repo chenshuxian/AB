@@ -3,66 +3,58 @@ import { View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 
 import ActiveCard from '../components/ActiveCard';
+import Section from '../components/Section';
 import Header from '../components/Header';
 
 const HomeScreen = (props) => {
+  const img = [
+    {
+      imgUrl: require('../assets/images/food1.jpg'),
+      title: '秋冬美食',
+      date: '2020/12/31',
+      loc: 'Taipei',
+    },
+    {
+      imgUrl: require('../assets/images/food2.jpg'),
+      title: '秋冬美食',
+      date: '2020/12/31',
+      loc: 'Taipei',
+    },
+    {
+      imgUrl: require('../assets/images/food1.jpg'),
+      title: '秋冬美食',
+      date: '2020/12/31',
+      loc: 'Taipei',
+    },
+  ];
+
   return (
     <SafeAreaView style={styles.container}>
       <Header props={props} />
-      <View
-        style={{
-          borderWidth: '15',
-          borderColor: 'white',
-        }}
-      >
-        <Text style={{ fontSize: 20, fontWeight: 'bold' }}>近期活動</Text>
-        <ScrollView horizontal showsHorizontalScrollIndicator='false'>
-          <ActiveCard
-            imgUrl={require('../assets/images/food1.jpg')}
-            title='秋冬美食'
-            date='2020/12/31'
-            loc='山外車站'
-            onClick={() => props.navigation.navigate('List')}
-          />
-          <ActiveCard
-            imgUrl={require('../assets/images/food2.jpg')}
-            title='秋冬美食'
-            date='2020/12/31'
-            loc='山外車站'
-          />
-          <ActiveCard
-            imgUrl={require('../assets/images/food1.jpg')}
-            title='秋冬美食'
-            date='2020/12/31'
-            loc='山外車站'
-          />
-        </ScrollView>
-      </View>
-      <View style={{ backgroundColor: 'black', borderWidth: `15` }}>
-        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white' }}>
-          分類活動
-        </Text>
-        <Text style={{ fontSize: 15, color: 'white', marginTop: 5 }}>
-          依分類尋找自己喜愛活動
-        </Text>
-        <ScrollView horizontal>
-          <ActiveCard
-            imgUrl={require('../assets/images/food1.jpg')}
-            title='運動'
-            textStyle={styles.textWhite}
-          />
-          <ActiveCard
-            imgUrl={require('../assets/images/food2.jpg')}
-            title='美食'
-            textStyle={styles.textWhite}
-          />
-          <ActiveCard
-            imgUrl={require('../assets/images/food1.jpg')}
-            title='文化'
-            textStyle={styles.textWhite}
-          />
-        </ScrollView>
-      </View>
+      <ScrollView>
+        <Section
+          outStyle={styles.whiteSection}
+          Title='近期活動'
+          ACList={img}
+          fontColor='black'
+          nav={props.navigation.navigate}
+        />
+        <Section
+          outStyle={styles.blackSection}
+          Title='四季活動'
+          smallTitle='依分類尋找自己喜愛活動'
+          ACList={img}
+          textStyle={styles.textWhite}
+          fontColor='white'
+        />
+        <Section
+          outStyle={styles.whiteSection}
+          Title='分類活動'
+          smallTitle='依分類尋找自己喜愛活動'
+          ACList={img}
+          fontColor='black'
+        />
+      </ScrollView>
     </SafeAreaView>
   );
 };
@@ -76,5 +68,13 @@ const styles = StyleSheet.create({
   textWhite: {
     color: 'white',
     fontSize: 16,
+  },
+  whiteSection: {
+    borderWidth: 15,
+    borderColor: 'white',
+  },
+  blackSection: {
+    backgroundColor: 'black',
+    borderWidth: 15,
   },
 });

@@ -15,12 +15,12 @@ const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: 'white',
   },
   card: {
     width: width - 40,
     marginBottom: 10,
+    alignSelf: 'center',
   },
 });
 
@@ -34,7 +34,11 @@ const ListScreen = (props) => (
         date='2020/12/31'
         loc='山外車站'
         listStyle={styles.card}
-        onClick={() => console.log('detail')}
+        onClick={() =>
+          props.navigation.navigate('Detail', {
+            url: require('../assets/images/food1.jpg'),
+          })
+        }
       />
       <ActiveCard
         imgUrl={require('../assets/images/food2.jpg')}
@@ -53,9 +57,6 @@ const ListScreen = (props) => (
         onClick={() => console.log('detail')}
       />
     </ScrollView>
-    <Text onPress={() => props.navigation.navigate('Home')}>
-      ListScreen, goBack
-    </Text>
   </SafeAreaView>
 );
 export default ListScreen;
