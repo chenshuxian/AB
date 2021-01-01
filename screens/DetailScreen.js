@@ -7,7 +7,7 @@ import {
   Dimensions,
   ScrollView,
 } from 'react-native';
-import { Button } from 'react-native-elements';
+import { Button, Divider } from 'react-native-elements';
 import { AntDesign, Fontisto } from '@expo/vector-icons';
 const { width, height } = Dimensions.get('window');
 
@@ -30,14 +30,21 @@ const DetailScreen = (props) => {
         showsVerticalScrollIndicator='false'
         style={{
           flex: 1,
-          alignSelf: 'flex-start',
           margin: 20,
           marginBottom: 0,
+          width: width - 40,
         }}
       >
-        <Text style={{ fontSize: 30, marginBottom: 10, fontWeight: 'bold' }}>
+        <Text
+          style={{
+            fontSize: 30,
+            marginBottom: 10,
+            fontWeight: 'bold',
+          }}
+        >
           金門馬拉松
         </Text>
+        <Divider style={styles.divider} />
         <Text style={styles.context}>
           <AntDesign name='calendar' size={24} color='black' /> : 2021-01-16~17
         </Text>
@@ -48,11 +55,13 @@ const DetailScreen = (props) => {
         <Text style={styles.context}>
           <AntDesign name='pushpin' size={24} color='black' /> : 金門大學
         </Text>
+        <Divider style={styles.divider} />
         <Text style={styles.context}>
           <AntDesign name='car' size={24} color='black' /> :{'\n'}
           可於於各鄉鎮公車站搭程接駁車前往會場{'\n'}
           接駁車每10分鐘一班{'\n'}時間 5:00 ~ 6:00
         </Text>
+        <Divider style={styles.divider} />
         <Text style={styles.context}>
           <AntDesign name='infocirlceo' size={24} color='black' /> 簡介:
         </Text>
@@ -105,5 +114,10 @@ const styles = StyleSheet.create({
   context: {
     fontSize: 20,
     marginBottom: 5,
+  },
+  divider: {
+    height: 0.5,
+    marginVertical: 15,
+    width,
   },
 });

@@ -1,4 +1,3 @@
-import { useLinkProps } from '@react-navigation/native';
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native';
 import ActiveCard from './ActiveCard';

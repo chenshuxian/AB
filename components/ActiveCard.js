@@ -7,8 +7,7 @@ import {
   Image,
   TouchableOpacity,
 } from 'react-native';
-//import { Image } from 'react-native-elements';
-import { AntDesign } from '@expo/vector-icons';
+import { Icon } from 'react-native-elements';
 
 const { width, height } = Dimensions.get('window');
 
@@ -16,10 +15,10 @@ const Heart = () => {
   const [habit, setHabit] = useState(0);
   if (habit) {
     return (
-      <AntDesign
+      <Icon
         name='heart'
+        type='antdesign'
         color='red'
-        size={20}
         onPress={() => {
           setHabit(!habit);
         }}
@@ -27,10 +26,10 @@ const Heart = () => {
     );
   }
   return (
-    <AntDesign
+    <Icon
       name='hearto'
+      type='antdesign'
       color='white'
-      size={20}
       onPress={() => {
         setHabit(!habit);
       }}
